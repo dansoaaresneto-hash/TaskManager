@@ -2,7 +2,9 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { AITaskSuggestion } from "../types";
 
 // Initialize Gemini Client
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const ai = new GoogleGenAI({
+  apiKey: import.meta.env.VITE_API_KEY
+});
 
 export const suggestTasksFromGoal = async (goal: string): Promise<AITaskSuggestion[]> => {
   try {
@@ -35,7 +37,6 @@ export const suggestTasksFromGoal = async (goal: string): Promise<AITaskSuggesti
     return [];
   } catch (error) {
     console.error("Error generating tasks:", error);
-    // Return a fallback or empty array to prevent app crash
     return [];
   }
 };
