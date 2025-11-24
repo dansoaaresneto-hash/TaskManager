@@ -1,12 +1,12 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { AITaskSuggestion } from "../types";
 
-// Lazy Initialization: Don't create the client immediately on file load.
-// This prevents the "White Screen of Death" if the API key is missing.
+// Lazy Initialization
 const getAiClient = () => {
-  const apiKey = import.meta.env.VITE_API_KEY;
+  // The API key must be obtained exclusively from process.env.API_KEY
+  const apiKey = process.env.API_KEY;
   if (!apiKey) {
-    console.warn("Gemini API Key is missing in environment variables.");
+    console.warn("Gemini API Key is missing in process.env.API_KEY");
     return null;
   }
   return new GoogleGenAI({ apiKey });
@@ -17,7 +17,7 @@ export const suggestTasksFromGoal = async (goal: string): Promise<AITaskSuggesti
     const ai = getAiClient();
     
     if (!ai) {
-      throw new Error("API Key is missing. Please verify your VITE_API_KEY settings.");
+      throw new Error("API Key is missing.");
     }
 
     const response = await ai.models.generateContent({
